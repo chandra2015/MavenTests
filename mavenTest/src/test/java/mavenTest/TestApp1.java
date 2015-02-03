@@ -1,3 +1,6 @@
+/*
+ *  This is sample Jnuit Test class
+ */
 package mavenTest;
 
 import junit.framework.Assert;
@@ -5,7 +8,6 @@ import junit.framework.Assert;
 import org.junit.Test;
 
  
-// TODO: Auto-generated Javadoc
 /**
  * The Class TestApp1.
  */
