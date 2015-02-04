@@ -14,45 +14,122 @@
    </dependencies>
    
    <build>
+   
    <plugins>
-   <plugin>
-    <groupId>org.codehaus.mojo</groupId>
-    <artifactId>findbugs-maven-plugin</artifactId>
-    <version>2.3.2</version>
-    <configuration>
-     <xmlOutput>true</xmlOutput>
-     <!-- Optional directory to put findbugs xdoc xml report -->
-     <xmlOutputDirectory>target/site</xmlOutputDirectory>
-    </configuration>
-   </plugin>
    
    
-   <plugin>
-    <!--To support pmd goals. For example: "mvn pmd:pmd" -->
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-pmd-plugin</artifactId>
-    <version>2.7.1</version>
-    <configuration>
-	    <targetJdk>1.7</targetJdk>
-	    <rulesets>
-	      <ruleset>src/main/resources/sampleApp-pmd.xml</ruleset>
-	    </rulesets>
-    </configuration>
-    </plugin>
-    
-     <plugin>
-       <!--To support checkstyle goals. For example: "mvn checkstyle:checkstyle"-->
-       <groupId>org.apache.maven.plugins</groupId>
-       <artifactId>maven-checkstyle-plugin</artifactId>
-       <version>2.9.1</version>
-       <configuration>
-           <!-- <configLocation>/home/greenhorn/MavenProjects/test-checkstyle.xml</configLocation>-->
-           <!-- The above conguration line works as well, but the below is prefered. -->
-           <configLocation>src/main/resources/test-checkstyle.xml</configLocation>
-       </configuration>
+    <!-- site Plugin -->
+   	  <plugin>             
+		<groupId>org.apache.maven.plugins</groupId>             
+		<artifactId>maven-site-plugin</artifactId>            
+		 <version>2.0</version>  
+		 <configuration>
+	           <outputDirectory>${project.build.directory}/reports</outputDirectory>
+	       </configuration>     
+	  </plugin>  
+	  
+	  
+   <!-- Checkstyle Plugin -->
+    <plugin>
+	       <!--To support checkstyle goals. For example: "mvn checkstyle:checkstyle"-->
+	       <groupId>org.apache.maven.plugins</groupId>
+	       <artifactId>maven-checkstyle-plugin</artifactId>
+	       <version>2.9.1</version>
+	       <executions>
+            <execution>
+                <id>checkstyle</id>
+                <phase>verify</phase>
+                <goals>
+                    <goal>check</goal>
+                </goals>
+            </execution>
+        </executions>
+	       <configuration>
+	           <!-- <configLocation>/home/greenhorn/MavenProjects/test-checkstyle.xml</configLocation>-->
+	           <!-- The above conguration line works as well, but the below is prefered. -->
+	           <configLocation>src/main/resources/test-checkstyle.xml</configLocation>
+	           <outputDirectory>${project.build.directory}/reports</outputDirectory>
+      		   <outputFile>${project.build.directory}/reports/checkstyle-result.xml</outputFile>
+      		   <outputFileFormat default-value="xml">${checkstyle.output.format}</outputFileFormat>
+	       </configuration>
    	  </plugin>
    	  
+   	   <!-- Findbugs plugin -->
+    <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>findbugs-maven-plugin</artifactId>
+        <version>2.4.0</version>
+        <executions>
+            <execution>
+                <id>findbug</id>
+                <phase>verify</phase>
+                <goals>
+                    <goal>check</goal>
+                </goals>
+            </execution>
+        </executions>
+        <configuration>
+            <findbugsXmlOutputDirectory>
+                ${project.build.directory}/reports
+            </findbugsXmlOutputDirectory>
+            <failOnError>false</failOnError>
+        </configuration>
+    </plugin>
+   	  
+	  <!-- xml plugin whcih will converts xml reports into html format - required for findbugs reports -->
+	  <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>xml-maven-plugin</artifactId>
+        <version>1.0</version>
+        <executions>
+            <execution>
+                <phase>verify</phase>
+                <goals>
+                    <goal>transform</goal>
+                </goals>
+            </execution>
+        </executions>
+        <configuration>
+            <transformationSets>
+                <transformationSet>
+                    <dir>${project.build.directory}/reports</dir>
+                    <outputDir>${project.build.directory}/reports</outputDir>
+                    <stylesheet>fancy-hist.xsl</stylesheet>
+                    <fileMappers>
+                        <fileMapper
+                                implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
+                            <targetExtension>.html</targetExtension>
+                        </fileMapper>
+                    </fileMappers>
+                </transformationSet>
+            </transformationSets>
+        </configuration>
+        <dependencies>
+            <dependency>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>findbugs</artifactId>
+                <version>2.0.0</version>
+            </dependency>
+        </dependencies>
+    </plugin>
+    
+    <!-- PMD Plugin -->
+     <plugin>
+	    <!--To support pmd goals. For example: "mvn pmd:pmd" -->
+	    <groupId>org.apache.maven.plugins</groupId>
+	    <artifactId>maven-pmd-plugin</artifactId>
+	    <version>2.7.1</version>
+	    <configuration>
+		    <targetJdk>1.7</targetJdk>
+		    <rulesets>
+		      <ruleset>src/main/resources/sampleApp-pmd.xml</ruleset>
+		    </rulesets>
+		    <outputDirectory>${project.build.directory}/reports</outputDirectory>
+	    </configuration>
+    </plugin>
+    
 </plugins>
+
  </build>
  
    
