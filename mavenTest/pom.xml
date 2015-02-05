@@ -126,6 +126,17 @@
 		    </rulesets>
 		    <outputDirectory>${project.build.directory}/reports</outputDirectory>
 	    </configuration>
+	    <executions>
+      <execution>
+         <phase>verify</phase>
+         <goals>
+            <goal>pmd</goal>
+            <goal>cpd</goal>
+            <goal>cpd-check</goal>
+            <goal>check</goal>
+         </goals>
+      </execution>
+   </executions>
     </plugin>
     
 </plugins>
